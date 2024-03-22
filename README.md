@@ -1,46 +1,7 @@
-# Getting Started with Create React App
+# fft-typescript
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+고속 푸리에 변환 예제. DFT까지는 구현하는게 그렇게 어렵지 않았는데, FFT는 문헌을 보고 이해할 필요가 있어서 좀 오래걸렸습니다. 게다가 특정 주기 제거가 필요하고 IFFT도 구현해줘야 해서 (+ Web환경에서 돌아갈 정도로 최적화) 구현하기 까다로웠습니다.
 
-## Available Scripts
+이걸 구현하지 않으면 상용 라이브러리를 쓰는 것 밖에 없는데. 쓸만한게 없어요. 아 진짜 소프트웨어 개발자들 일 안하냐.
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+그래서 직접 구현하기로 했습니다. 성능이 얼마나 나올지는 모르겠는데 일단 해볼게요. 어짜피 50개 data poin에서 100ms 내로만 계산하면 되니까. 만약 성능 안나온다 싶으면 wasm으로 포팅하는 수 밖에.
