@@ -22,20 +22,20 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
+function LineGraph({ data, title = "" }: { data: number[]; title?: string }) {
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: title,
+      },
     },
-    title: {
-      display: true,
-      text: "Chart",
-    },
-  },
-};
+  };
 
-function LineGraph({ data }: { data: number[] }) {
   const [graphData, setGraphData] = useState({
     labels: data.map(() => ""),
     datasets: [
