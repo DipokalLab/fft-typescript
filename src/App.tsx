@@ -13,8 +13,8 @@ function App() {
   const getSinWave = () => {
     let arr = [];
     //128
-    for (let index = 0; index < 2 ** 7; index++) {
-      arr.push(Math.sin(index / 10));
+    for (let index = 0; index < 2 ** 8; index++) {
+      arr.push(Math.sin(index / 10) + Math.sin((index * 40) / 10));
     }
 
     return arr;
