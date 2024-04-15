@@ -3,6 +3,42 @@ const fft = (data: number[]) => {
   return result.slice(0, result.length / 2);
 };
 
+const ifft = (data: number[]) => {
+  try {
+    const transformedData = data.map((item) => {
+      return new Complex(item, 0);
+    });
+
+    return ifftCalc(transformedData).map((item: any) => item.re);
+  } catch (error) {
+    return [0];
+  }
+};
+
+function ifftCalc(data: Complex[]) {
+  let N = data.length;
+  let iN = 1 / N;
+
+  for (let i = 0; i < N; ++i) {
+    if (data[i]) {
+      data[i].im = -data[i].im;
+    }
+  }
+
+  const realData = data.map((item) => {
+    return item.re;
+  });
+
+  data = fftCalc(realData);
+
+  for (let i = 0; i < N; ++i) {
+    data[i].im = -data[i].im;
+    data[i].re *= iN;
+    data[i].im *= iN;
+  }
+  return data;
+}
+
 const fftCalc = (data: number[]) => {
   let N = data.length;
 
@@ -77,12 +113,6 @@ class Complex {
     dst.im = er * Math.sin(this.im);
     return dst;
   };
-  log = () => {
-    if (!this.re) console.log(this.im.toString() + "j");
-    else if (this.im < 0)
-      console.log(this.re.toString() + this.im.toString() + "j");
-    else console.log(this.re.toString() + "+" + this.im.toString() + "j");
-  };
 }
 
-export { fft };
+export { fft, ifft };
