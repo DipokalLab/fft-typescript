@@ -1,17 +1,81 @@
-const fft = (data: number[]) => {
-  const result = fftCalc(data).map((item: any) => item.re);
+import { Complex } from "./complex";
+
+const stft = (data: number[]) => {
+  const windowSize = 16;
+  const padding = 8;
+  const valueArr = [];
+
+  for (
+    let index = windowSize;
+    index < data.length + 1;
+    index = index + padding
+  ) {
+    const startPoint = index - windowSize;
+    const endPoint = index;
+    const splitData = data.slice(startPoint, endPoint);
+    const fftData = fft(splitData);
+    valueArr.push(fftData);
+  }
+
+  return valueArr;
+};
+
+// note: istft
+const istft = (data: Complex[][]): Complex[] => {
+  const windowSize = 16;
+  const padding = 8;
+  const valueArr: Complex[] = new Array(
+    data.length * windowSize - (windowSize - padding) * (data.length - 1)
+  ).fill(new Complex(0, 0));
+
+  for (let index = 0; index < valueArr.length; index++) {
+    valueArr[index] = new Complex(0, 0);
+  }
+
+  const inversedArr = [];
+
+  //console.log(data.length);
+
+  for (let index = 0; index < data.length; index++) {
+    const startPoint = index * (windowSize - padding);
+    const endPoint = startPoint + windowSize;
+    const inversed = ifft(data[index]);
+    //console.log(index, inversed);
+    inversedArr.push(inversed);
+  }
+
+  console.log(valueArr, inversedArr);
+
+  let count = 0;
+
+  for (let arrX = 0; arrX < inversedArr.length; arrX++) {
+    for (let arrY = 0; arrY < inversedArr[arrX].length; arrY++) {
+      //inversedArr[arrX][arrY].re;
+      valueArr[count].re = inversedArr[arrX][arrY].re;
+      count += 1;
+    }
+  }
+
+  // for (let index = 0; index < valueArr.length; index++) {
+  //   //console.log(Math.floor(index / 8));
+  //   if (Math.floor(index / 8) <= 31) {
+  //     valueArr[index].re = inversedArr[Math.floor(index / 8)][index % 8].re;
+  //   }
+  // }
+
+  return valueArr;
+};
+
+const fft = (data: number[]): Complex[] => {
+  const result = fftCalc(data);
   return result.slice(0, result.length / 2);
 };
 
-const ifft = (data: number[]) => {
+const ifft = (data: Complex[]): Complex[] => {
   try {
-    const transformedData = data.map((item) => {
-      return new Complex(item, 0);
-    });
-
-    return ifftCalc(transformedData).map((item: any) => item.re);
+    return ifftCalc(data);
   } catch (error) {
-    return [0];
+    return [new Complex(0, 0)];
   }
 };
 
@@ -81,38 +145,4 @@ const fftCalc = (data: number[]) => {
   return output;
 };
 
-class Complex {
-  re: number;
-  im: number;
-  constructor(re: number, im: number) {
-    this.re = re;
-    this.im = im || 0.0;
-  }
-
-  add = (other: Complex, dst: Complex) => {
-    dst.re = this.re + other.re;
-    dst.im = this.im + other.im;
-    return dst;
-  };
-
-  sub = (other: Complex, dst: Complex) => {
-    dst.re = this.re - other.re;
-    dst.im = this.im - other.im;
-    return dst;
-  };
-
-  mul = (other: Complex, dst: Complex) => {
-    var r = this.re * other.re - this.im * other.im;
-    dst.im = this.re * other.im + this.im * other.re;
-    dst.re = r;
-    return dst;
-  };
-  cexp = (dst: Complex) => {
-    var er = Math.exp(this.re);
-    dst.re = er * Math.cos(this.im);
-    dst.im = er * Math.sin(this.im);
-    return dst;
-  };
-}
-
-export { fft, ifft };
+export { fft, ifft, stft, istft };

@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { Complex } from "../math/complex";
 
 ChartJS.register(
   CategoryScale,
@@ -22,7 +23,7 @@ ChartJS.register(
   Legend
 );
 
-function LineGraph({ data, title = "" }: { data: number[]; title?: string }) {
+function LineGraph({ data, title = "" }: { data: Complex[]; title?: string }) {
   const options = {
     responsive: true,
     plugins: {
@@ -40,10 +41,20 @@ function LineGraph({ data, title = "" }: { data: number[]; title?: string }) {
     labels: data.map(() => ""),
     datasets: [
       {
-        label: "Dataset",
-        data: data,
+        label: "Re",
+        data: data.map((item) => {
+          return item.re;
+        }),
         borderColor: "#2e82ff",
         backgroundColor: "#2e82ff",
+      },
+      {
+        label: "Im",
+        data: data.map((item) => {
+          return item.im;
+        }),
+        borderColor: "#1fff6d",
+        backgroundColor: "#1fff6d",
       },
     ],
   });
@@ -53,10 +64,20 @@ function LineGraph({ data, title = "" }: { data: number[]; title?: string }) {
       labels: data.map(() => ""),
       datasets: [
         {
-          label: "Dataset",
-          data: data,
+          label: "Re",
+          data: data.map((item) => {
+            return item.re;
+          }),
           borderColor: "#2e82ff",
           backgroundColor: "#2e82ff",
+        },
+        {
+          label: "Im",
+          data: data.map((item) => {
+            return item.im;
+          }),
+          borderColor: "#1fff6d",
+          backgroundColor: "#1fff6d",
         },
       ],
     });
